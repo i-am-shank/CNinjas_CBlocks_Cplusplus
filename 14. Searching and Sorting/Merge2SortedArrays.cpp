@@ -19,6 +19,16 @@ void merge(int *arr1, int size1, int *arr2, int size2, int *ans) {
             k++;
         }
     }
+    while (i < size1){
+        ans[k] = arr1[i];
+        k++;
+        i++;
+    }
+    while (j < size2){
+        ans[k] = arr2[j];
+        k++;
+        j++;
+    }
     return;
 }
 
