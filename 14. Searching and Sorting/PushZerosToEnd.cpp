@@ -1,3 +1,7 @@
+// Time Complexity = O(n*2) .. O(n) for each test case.
+// Space Complexity = O(n*2) .. O(n) for each test case.
+
+
 #include <iostream>
 using namespace std;
 
