@@ -1,28 +1,27 @@
-// TIme Complexity = O(N)
-// Space Complexity = O(N)
-
-
 #include <iostream>
-#include <cstring>
 using namespace std;
 
 bool checkAB(char input[]) {
-    if (strlen(input) == 0) {
+    if(input[0] == '\0') {
         return true;
     }
-    if (input[0] == 'a') {
-        if (input[1] == '\0') {
+    bool smallAns = checkAB(input+1);
+    if(input[0] == 'a') {
+        if(input[1] == '\0') {
             return true;
         }
-        else if (input[1] == 'a') {
-            return checkAB(input+1);
+        else if(input[1] == 'a') {
+            return smallAns;
         }
-        else if (input[1]=='b' && input[2]=='b') {
-            if (input[3] == '\0') {
+        else if(input[1]=='b' && input[2]=='b') {
+            if(input[3] == '\0') {
                 return true;
             }
-            else if (input[3] == 'a') {
+            else if(input[3] == 'a') {
                 return checkAB(input+3);
+            }
+            else {
+                return false;
             }
         }
     }
@@ -31,8 +30,14 @@ bool checkAB(char input[]) {
 
 int main() {
     char input[1000];
+    bool ans;
     cin >> input;
-    bool ans = checkAB(input);
-    cout << (ans == true ? "true" : "false") << endl;
+    ans = checkAB(input);
+    if(ans == true) {
+        cout << "true" << endl;
+    }
+    else {
+        cout << "false" << endl;
+    }
     return 0;
 }

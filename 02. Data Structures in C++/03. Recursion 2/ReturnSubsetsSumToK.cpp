@@ -1,64 +1,64 @@
+// TIme Complexity = O(2^N)  ..  these no. of recursive calls
+// Space Complexity = O((N^2) * (2^N))  ..  a 2D array in each recursive call
+
+
 #include <iostream>
 using namespace std;
 
-int subset(int input[], int startIndex, int n, int** output) {
-    if (startIndex == n) {
-        output[0][0] = 0;
-        return 1;
-    }
-    int smallSize = subset(input, startIndex+1, n, output);
-    for (int i=0; i<smallSize; i++) {
-        for (int j=1; j<=output[i][0]; j++) {
-            output[i+smallSize][j+1] = output[i][j];
+int subsetHelper(int input[], int start, int n, int **output, int k) {
+    if (start == n) {
+        if (k == 0) {
+            output[0][0] = 0;
+            return 1;
         }
-        output[i+smallSize][1] = input[startIndex];
-        output[i+smallSize][0] = output[i][0] + 1;
-    }
-    return 2 * smallSize;
-}
-
-int subsetSumHelper(int** subsets, int start, int n, int** output, int k) {
-    if (start==n || k==0) {
-        return 0;
-    }
-    int smallSize = subsetSumHelper(subsets, start+1, n, output, k);
-    int sum = 0;
-    for (int i=1; i<=subsets[start][0]; i++) {
-        sum += subsets[start][i];
-    }
-    if (sum == k) {
-        for (int i=0; i<=subsets[start][0] ; i++) {
-            output[smallSize][i] = subsets[start][i];
+        else {
+            return 0;
         }
-        return smallSize + 1;
     }
-    else {
-        return smallSize;
+    int size1, size2, m=0;
+    int **smallOutput1 = new int*[1000];
+    for (int i=0; i<1000; i++) {
+        smallOutput1[i] = new int[20];
     }
+    int **smallOutput2 = new int*[1000];
+    for (int i=0; i<1000; i++) {
+        smallOutput2[i] = new int[20];
+    }
+    size1 = subsetHelper(input, start+1, n, smallOutput1, k);
+    size2 = subsetHelper(input, start+1, n, smallOutput2, k-input[start]);
+    for (int i=0; i<size1; i++) {
+        for (int j=0; j<=smallOutput1[i][0]; j++) {
+            output[m][j] = smallOutput1[i][j];
+        }
+        m++;
+    }
+    for (int i=0; i<size2; i++) {
+        for (int j=1; j<=smallOutput2[i][0]; j++) {
+            output[m][j+1] = smallOutput2[i][j];
+        }
+        output[m][0] = smallOutput2[i][0] + 1;
+        output[m][1] = input[start];
+        m++;
+    }
+    return m;
 }
 
 int subsetSumToK(int input[], int n, int** output, int k) {
-    int **subsets = new int* [1000];
-    for (int i=0; i<1000; i++) {
-        subsets[i] = new int [50];
-    }
-    int totalSubsets = subset(input, 0, n, subsets);
-    return subsetSumHelper(subsets, 0, totalSubsets, output, k);
+    return subsetHelper(input, 0, n, output, k);
 }
 
 int main() {
-    int n;
+    int n, k;
     cin >> n;
-    int input[n];
+    int *input = new int[n];
     for (int i=0; i<n; i++) {
         cin >> input[i];
     }
-    int k;
-    cin >> k;
     int **output = new int* [1000];
     for (int i=0; i<1000; i++) {
-        output[i] = new int[50];
+        output[i] = new int[20];
     }
+    cin >> k;
     int size = subsetSumToK(input, n, output, k);
     for (int i=0; i<size; i++) {
         for (int j=1; j<=output[i][0]; j++) {
@@ -66,5 +66,10 @@ int main() {
         }
         cout << endl;
     }
+    for (int i=0; i<1000; i++) {
+        delete []output[i];
+    }
+    delete []output;
+    delete []input;
     return 0;
 }

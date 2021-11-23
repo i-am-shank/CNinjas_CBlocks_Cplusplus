@@ -1,19 +1,19 @@
 // Time Complexity = O(logN)
-// Space Complexity = O(N)
+// Space Complexity = O(logN)  ..  logN recursion calls are waiting at a particular time
 
 
 #include <iostream>
 using namespace std;
 
 int binarySearchHelper(int input[], int start, int end, int element) {
-    if (start > end) {
+    if(start > end) {
         return -1;
     }
     int mid = (start+end) / 2;
-    if (input[mid] == element) {
+    if(input[mid] == element) {
         return mid;
     }
-    else if (input[mid] < element) {
+    else if(input[mid] < element) {
         return binarySearchHelper(input, mid+1, end, element);
     }
     else {
@@ -28,7 +28,7 @@ int binarySearch(int input[], int size, int element) {
 int main() {
     int size, element, ans;
     cin >> size;
-    int *input = new int[size];
+    int *input = new int [size];
     for (int i=0; i<size; i++) {
         cin >> input[i];
     }
