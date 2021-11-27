@@ -1,18 +1,17 @@
 #include <iostream>
 using namespace std;
 
-int findUnique(int *arr, int n) {
-    int temp[1000000];
+int findDuplicate(int *arr, int n) {
+    int *temp = new int[1000000];
     for (int i=0; i<1000000; i++) {
         temp[i] = 0;
     }
-    for(int i=0; i<n; i++) {
-        int ele = arr[i];
-        temp[ele] += 1;
+    for (int i=0; i<n; i++) {
+        temp[arr[i]] += 1;
     }
     int ans = -1;
-    for(int i=0; i<1000000; i++) {
-        if(temp[i] == 1) {
+    for (int i=0; i<1000000; i++) {
+        if(temp[i] == 2) {
             ans = i;
             break;
         }
@@ -23,14 +22,15 @@ int findUnique(int *arr, int n) {
 int main() {
     int t;
     cin >> t;
-    while (t--) {
+    while(t--) {
         int n;
         cin >> n;
         int *arr = new int[n];
-        for (int i=0; i<n; ++i) {
+        for (int i=0; i<n; i++) {
             cin >> arr[i];
         }
-        cout << findUnique(arr, n) << endl;
+        cout << findDuplicate(arr, n) << endl;
+        delete [] arr;
     }
     return 0;
 }
