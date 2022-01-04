@@ -20,7 +20,7 @@ int main() {
     cout << "Size : " << ourmap.size() << endl; // same .size() function in all STL
 
     // -------- F I N D ---------
-    cout << ourmap.at("abc") << endl; //If key not present, gives error
+    cout << ourmap.at("abc") << endl; //If key not present, gives error  ..  can't edit the value with this.
     cout << ourmap["ghi"] << endl; //If key not present, inserts 0 value and returns.
     
     // -------- C O U N T ---------

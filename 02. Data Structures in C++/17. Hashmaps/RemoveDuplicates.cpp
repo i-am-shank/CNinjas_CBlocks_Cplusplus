@@ -3,6 +3,10 @@
 #include <unordered_map>
 using namespace std;
 
+
+// Time Complexity = O(N)
+// Space Complexity = O(N)
+
 vector<int> RemoveDuplicates(int* arr, int size) {
     vector<int> v;
     unordered_map <int, bool> ourmap;
