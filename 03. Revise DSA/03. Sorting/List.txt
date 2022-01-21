@@ -1,0 +1,9 @@
+01. Selection Sort
+02. Bubble Sort
+03. Insertion Sort
+04. Merge Sort
+05. Quick Sort
+06. Heap Sort
+07. Counting Sort
+08. Radix Sort
+09. Bucket Sort
