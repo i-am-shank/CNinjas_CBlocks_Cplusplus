@@ -18,7 +18,7 @@ class TreeNode {
         this->data = data;
     }
     ~TreeNode () {
-        for(int i=0; i<children.size(); i++) {
+        for(int i=0; i<this->children.size(); i++) {
             delete children[i];
         }
     }
