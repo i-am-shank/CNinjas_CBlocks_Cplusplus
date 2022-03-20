@@ -2,63 +2,56 @@
 #include <queue>
 using namespace std;
 
-void BFS(int **edges, int n, int sv, bool* visited) {
-    queue<int> q;
-    q.push(sv);
-    visited[sv] = true;
-    while(!q.empty()) {
-        int front = q.front();
-        q.pop();
-        cout << front << " ";
-        // visited[front] = true;  .NO.  Visited only when inserted to queue 1st time.
-        // Else all connections of the vertex, in queue before, will push same element.
-        for(int i=0; i<n; i++) {
-            if(i == front) {
-                continue;
-            }
-            if(edges[front][i] == 1 && !visited[i]) {
-                q.push(i);
-                visited[i] = true;
-            }
-        }
-    }
-}
-
-void printBFS(int **edges, int n) {
-    bool *visited = new bool [n];
-    for(int i=0; i<n; i++) {
-        visited[i] = false;
-    }
-    for(int i=0; i<n; i++) {
-        if(visited[i] != true) {
-            BFS(edges, n, i, visited);
-        }
-    }
-    cout << endl;
-    delete []visited;
-    return;
+void printBFS(int** edges, int n, int sv, bool *visited) {
+	queue<int> q;
+	q.push(sv);
+	while(!q.empty()) {
+		int front = q.front();
+		cout << front << " ";
+		q.pop();
+		visited[front] = true;
+		for(int i=0; i<n; i++) {
+			if(front == i) {  // Not work on same node multiple times.
+				continue;
+			}
+			if(visited[i]) {  // Not push multiple times, an already queue-pushed node
+				continue;
+			}
+			if(edges[front][i] == 1) {  // Traversing Breadth-wise.. putting nodes in queue
+				q.push(i);
+				visited[i] = true;  // Once gone to queue, marked visited
+			}
+		}
+	}
+	return;
 }
 
 int main() {
-    int v, e;
-    cin >> v >> e;
-    int ** adjacencyMatrix = new int* [v];
-    for(int i=0; i<v; i++) {
-        adjacencyMatrix[i] = new int[v];
-        for(int j=0; j<v; j++) {
-            adjacencyMatrix[i][j] = 0;
-        }
-    }
-    for(int i=0; i<e; i++) {
-        int a, b;
-        cin >> a >> b;
-        adjacencyMatrix[a][b] = 1;
-        adjacencyMatrix[b][a] = 1;
-    }
-    printBFS(adjacencyMatrix, v);
-    for(int i=0; i<v; i++) {
-        delete []adjacencyMatrix[i];
-    }
-    delete []adjacencyMatrix;
-    return 0;
+	int n, e;
+	cin >> n >> e;
+	int **edges = new int*[n];
+	for(int i=0; i<n; i++) {
+		edges[i] = new int[n];
+		for(int j=0; j<n; j++) {
+			edges[i][j] = 0;
+		}
+	}
+	// Take input edges
+	for(int i=0; i<e; i++) {
+		int f, s;
+		cin >> f >> s;
+		edges[f][s] = 1;
+		edges[s][f] = 1;
+	}
+	bool *visited = new bool[n];
+	for(int i=0; i<n; i++) {
+		visited[i] = false;
+	}
+	printBFS(edges, n, 0, visited);
+	for(int i=0; i<n; i++) {
+		delete []edges[i];
+	}
+	delete []edges;
+	delete []visited;
+	return 0;
 }
