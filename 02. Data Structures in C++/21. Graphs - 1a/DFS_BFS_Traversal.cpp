@@ -90,5 +90,9 @@ int main() {
 	printDFS(edges, v);
 	cout << "BFS " << endl;
 	printBFS(edges, v);
+	for(int i=0; i<v; i++) {
+		delete []edges[i];
+	}
+	delete []edges;
 	return 0;
 }

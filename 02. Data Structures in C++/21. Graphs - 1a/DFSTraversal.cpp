@@ -28,7 +28,7 @@ int main() {
 			edges[i][j] = 0;
 		}
 	}
-	for(int i=0; i<v; i++) {
+	for(int i=0; i<e; i++) {
 		int f, s;
 		cin >> f >> s;
 		edges[f][s] = 1;
