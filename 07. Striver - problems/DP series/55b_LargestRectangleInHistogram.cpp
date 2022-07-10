@@ -2,6 +2,46 @@
 using namespace std;
 
 class Solution {
+	int maxArea_best(int n, vector<int>& heights) {
+		int leftSmaller[n];
+		stack<int> stk;
+		for(int i=0; i<n; i++) {
+			int h = heights[i], leftSmall, rightSmall;
+			if(!stk.empty() && h < heights[stk.top()]) {
+				h = stk.top();
+				rightSmall = i;
+				stk.pop();
+				leftSmall = stk.top();
+				int area = (h * (rightSmall - leftSmall));
+			}
+			else { // h > heights[stk.top()]
+				stk.push(i);
+			}
+			while(!stk.empty() && heights[stk.top()] >= heights[i]) {
+				stk.pop();
+			}
+			if(!stk.empty()) {
+				int rightSmall = i, leftSmall;
+				if(stk.size() == 1) {
+					leftSmall = 0;
+				}
+				int area = (stk.top()) * (rightSmall-leftSmall);
+				leftSmaller[i] = stk.top() + 1;
+			}
+			else {
+				leftSmaller[i] = 0;
+			}
+			stk.push(i);
+		}
+		int area = 0;
+		while(!stk.empty()) {
+			int top = stk.top();
+			stk.pop();
+			int leftSmall = stk.top(); // 2nd ele
+			int rightSmall = 
+		}
+	}
+
 	// Recursion
 	// Time : O(n)
 	// Space : O(n)
