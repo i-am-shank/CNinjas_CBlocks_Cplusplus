@@ -1,16 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void printBFS(int** edges, int n, int sv, bool* visited) {
-	vector<int> v;
+vector<int> BFS(int** edges, int v, int s, bool* visited) {
 	queue<int> q;
-	q.push(sv);
-	v.push_back(sv);
-	visited[sv] = true;
+	vector<int> ans;
+	q.push(s);
+	visited[s] = true;
 	while(!q.empty()) {
 		int front = q.front();
+		ans.push_back(front);
 		q.pop();
-		for(int i=0; i<n; i++) {
+		for(int i=0; i<v; i++) {
 			if(edges[i][front] == 1) {
 				if(i == front) {
 					continue;
@@ -19,30 +19,27 @@ void printBFS(int** edges, int n, int sv, bool* visited) {
 					continue;
 				}
 				q.push(i);
-				v.push_back(i);
 				visited[i] = true;
 			}
 		}
 	}
-	sort(v.begin(), v.end());
-	for(int i=0; i<v.size(); i++) {
-		cout << v[i] << " ";
-	}
-	return;
+	return ans;
 }
 
-void printConnected(int** edges, int n) {
-	bool* visited = new bool[n];
-	for(int i=0; i<n; i++) {
+vector<vector<int>> allComponents(int** edges, int v) {
+	vector<vector<int>> ans;
+	bool* visited = new bool[v];
+	for(int i=0; i<v; i++) {
 		visited[i] = false;
 	}
-	for(int i=0; i<n; i++) {
+	for(int i=0; i<v; i++) {
 		if(visited[i] == false) {
-			printBFS(edges, n, i, visited);
-			cout << endl;
+			vector<int> smallAns = BFS(edges, v, i, visited);
+			ans.push_back(smallAns);
 		}
 	}
-	return;
+	delete []visited;
+	return ans;
 }
 
 int main() {
@@ -61,6 +58,18 @@ int main() {
 		edges[f][s] = 1;
 		edges[s][f] = 1;
 	}
-	printConnected(edges, v);
+	vector<vector<int>> ans = allComponents(edges, v);
+	for(int i=0; i<ans.size(); i++) {
+		vector<int> temp = ans[i];
+		sort(temp.begin(), temp.end());
+		for(int j=0; j<temp.size(); j++) {
+			cout << temp[j] << " ";
+		}
+		cout << endl;
+	}
+	for(int i=0; i<v; i++) {
+		delete []edges[i];
+	}
+	delete []edges;
 	return 0;
 }

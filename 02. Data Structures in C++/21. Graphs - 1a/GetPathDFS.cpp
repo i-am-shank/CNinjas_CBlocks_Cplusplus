@@ -1,33 +1,42 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int>* pathDFS(int** edges, int n, int s, int e, bool* visited) {
-	if(s == e) {
-		vector<int>* ans = new vector<int> ();
-		ans->push_back(e);
+vector<int> getPathDFSHelp(int** edges, int v, int v1, int v2, bool* visited) {
+	vector<int> ans;
+	visited[v1] = true;
+	if(v1 == v2) {
+		ans.push_back(v1);
 		return ans;
 	}
-	visited[s] = true;
-	for(int i=0; i<n; i++) {
-		if(edges[i][s] == 1) {
-			if(i == s) {
+	for(int i=0; i<v; i++) {
+		if(edges[i][v1] == 1) {
+			if(i == v1) {
 				continue;
 			}
 			if(visited[i] == true) {
 				continue;
 			}
-			vector<int>* smallAns = pathDFS(edges, n, i, e, visited);
-			if(smallAns != NULL) {
-				smallAns->push_back(s);
+			vector<int> smallAns = getPathDFSHelp(edges, v, i, v2, visited);
+			if(!smallAns.empty()) {
+				smallAns.push_back(v1);
 				return smallAns;
 			}
 		}
 	}
-	return NULL;
+	return ans;
+}
+
+vector<int> getPathDFS(int** edges, int v, int v1, int v2) {
+	bool* visited = new bool[v];
+	for(int i=0; i<v; i++) {
+		visited[i] = false;
+	}
+	vector<int> ans = getPathDFSHelp(edges, v, v1, v2, visited);
+	return ans;
 }
 
 int main() {
-	int v, e;  // No. of vertices   ...   No. of edges
+	int v, e;  // No. of vertices  ..  No. of edges
 	cin >> v >> e;
 	int **edges = new int*[v];
 	for(int i=0; i<v; i++) {
@@ -42,23 +51,13 @@ int main() {
 		edges[f][s] = 1;
 		edges[s][f] = 1;
 	}
-	int start, target;
-	cin >> start >> target;
-	bool* visited = new bool[v];
-	for(int i=0; i<v; i++) {
-		visited[i] = false;
-	}
-	vector<int>* ans = pathDFS(edges, v, start, target, visited);
-	if(ans != NULL) {
-		for(int i=0; i<ans->size(); i++) {
-			cout << ans->at(i) << " ";
+	int v1, v2;
+	cin >> v1 >> v2;
+	vector<int> ans = getPathDFS(edges, v, v1, v2);
+	if(ans.size() != 0) {
+		for(int i=0; i<ans.size(); i++) {
+			cout << ans[i] << " ";
 		}
 	}
-	cout << endl;
-	delete []visited;
-	for(int i=0; i<v; i++) {
-		delete []edges[i];
-	}
-	delete []edges;
 	return 0;
 }

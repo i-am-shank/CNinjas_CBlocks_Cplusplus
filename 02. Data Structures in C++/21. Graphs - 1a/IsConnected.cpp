@@ -1,50 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void DFSTraversal(int** edges, int n, int sv, bool* visited) {
-	visited[sv] = true;
-	for(int i=0; i<n; i++) {
-		if(edges[i][sv] == 1) {
-			if(i == sv) {
-				continue;
-			}
-			if(visited[i] == 1) {
-				continue;
-			}
-			visited[i] = 1;
-			DFSTraversal(edges, n, i, visited);
-		}
-	}
-	return;
-}
-
-bool isConnected1(int** edges, int n) {
-	bool *visited = new bool[n];
-	for(int i=0; i<n; i++) {
-		visited[i] = false;
-	}
-	DFSTraversal(edges, n, 0, visited);
-	int count = 0;
-	for(int i=0; i<n; i++) {
-		if(visited[i] == false) {
-			count++;
-			break;
-		}
-	}
-	if(count == 0) {
-		return true;
-	}
-	return false;
-}
-
-void BFSTraversal(int** edges, int n, int sv, bool* visited) {
+void BFS(int** edges, int s, int v, bool* visited) {
 	queue<int> q;
-	q.push(sv);
-	visited[sv] = true;
+	q.push(s);
+	visited[s] = true;
 	while(!q.empty()) {
 		int front = q.front();
 		q.pop();
-		for(int i=0; i<n; i++) {
+		for(int i=0; i<v; i++) {
 			if(edges[i][front] == 1) {
 				if(i == front) {
 					continue;
@@ -52,37 +16,66 @@ void BFSTraversal(int** edges, int n, int sv, bool* visited) {
 				if(visited[i] == true) {
 					continue;
 				}
-				visited[i] = 1;
-				BFSTraversal(edges, n, i, visited);
+				q.push(i);
+				visited[i] = true;
 			}
 		}
 	}
 	return;
 }
 
-bool isConnected2(int** edges, int n) {
-	bool* visited = new bool[n];
-	for(int i=0; i<n; i++) {
+bool isConnectedBFS(int** edges, int v) {
+	bool* visited = new bool[v];
+	for(int i=0; i<v; i++) {
 		visited[i] = false;
 	}
-	BFSTraversal(edges, n, 0, visited);
-	int count = 0;
-	for(int i=0; i<n; i++) {
+	BFS(edges, 0, v, visited);
+	bool ans = true;
+	for(int i=0; i<v; i++) {
 		if(visited[i] == false) {
-			count++;
+			ans = false;
 			break;
 		}
 	}
-	if(count == 0) {
-		return true;
+	return ans;
+}
+
+void DFS(int** edges, int s, int v, bool* visited) {
+	visited[s] = true;
+	for(int i=0; i<v; i++) {
+		if(edges[s][i] == 1) {
+			if(s == i) {
+				continue;
+			}
+			if(visited[i] == true) {
+				continue;
+			}
+			DFS(edges, i, v, visited);
+		}
 	}
-	return false;
+	return;
+}
+
+bool isConnectedDFS(int** edges, int v) {
+	bool* visited = new bool[v];
+	for(int i=0; i<v; i++) {
+		visited[i] = false;
+	}
+	DFS(edges, 0, v, visited);
+	bool ans = true;
+	for(int i=0; i<v; i++) {
+		if(visited[i] == false) {
+			ans = false;
+			break;
+		}
+	}
+	return ans;
 }
 
 int main() {
 	int v, e;
 	cin >> v >> e;
-	int **edges = new int*[v];
+	int** edges = new int*[v];
 	for(int i=0; i<v; i++) {
 		edges[i] = new int[v];
 		for(int j=0; j<v; j++) {
@@ -95,9 +88,12 @@ int main() {
 		edges[f][s] = 1;
 		edges[s][f] = 1;
 	}
-	bool ans = isConnected1(edges, v);
-	cout << (ans == true ? "true" : "false") << endl;
-	bool ans2 = isConnected2(edges, v);
-	cout << (ans2 == true ? "true" : "false") << endl;
+	bool ans = isConnectedDFS(edges, v);  // answer from DFS
+	bool ansBFS = isConnectedBFS(edges, v);  // answer from BFS
+	cout << (ansBFS == true ? "true" : "false") << endl;
+	for(int i=0; i<v; i++) {
+		delete []edges[i];
+	}
+	delete []edges;
 	return 0;
 }

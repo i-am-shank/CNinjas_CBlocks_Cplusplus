@@ -1,39 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bool hasPathDFS(int** edges, int n, int x, int y, bool* visited) {
-	if(x == y) {
-		return true;
-	}
-	visited[x] = true;
-	for(int i=0; i<n; i++) {
-		if(i == x) {
-			continue;
-		}
-		if(edges[i][x] == 1) {
-			if(visited[i] == true) {
-				continue;
-			}
-			bool smallAns = hasPathDFS(edges, n, i, y, visited);
-			if(smallAns == true) {
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-bool hasPathBFS(int** edges, int n, int x, int y, bool* visited) {
+bool hasPathBFS(int** edges, int v, int v1, int v2, bool* visited) {
 	queue<int> q;
-	q.push(x);
-	visited[x] = true;
+	q.push(v1);
+	visited[v1] = true;
 	while(!q.empty()) {
 		int front = q.front();
 		q.pop();
-		if(front == y) {
+		if(front == v2) {
 			return true;
 		}
-		for(int i=0; i<n; i++) {
+		for(int i=0; i<v; i++) {
 			if(i == front) {
 				continue;
 			}
@@ -47,6 +25,41 @@ bool hasPathBFS(int** edges, int n, int x, int y, bool* visited) {
 		}
 	}
 	return false;
+}
+
+bool hasPathDFS(int** edges, int v, int v1, int v2, bool* visited) {
+	if(v1 == v2) {
+		return true;
+	}
+	visited[v1] = true;
+	for(int i=0; i<v; i++) {
+		if(edges[i][v1] == 1) {
+			if(i == v1) {
+				continue;
+			}
+			if(visited[i] == true) {
+				continue;
+			}
+			int smallAns = hasPathBFS(edges, v, i, v2, visited);
+			if(smallAns == true) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool hasPath(int** edges, int v, int v1, int v2) {
+	bool *visited = new bool[v];
+	for(int i=0; i<v; i++) {
+		visited[i] = false;
+	}
+	bool ansDFS = hasPathDFS(edges, v, v1, v2, visited);
+	for(int i=0; i<v; i++) {  // Preparing visited array again for BFS.
+		visited[i] = false;
+	}
+	bool ansBFS = hasPathBFS(edges, v, v1, v2, visited);
+	return ansBFS;
 }
 
 int main() {
@@ -65,15 +78,9 @@ int main() {
 		edges[f][s] = 1;
 		edges[s][f] = 1;
 	}
-	int x, y;
-	cin >> x >> y;
-	bool *visited = new bool[v];
-	for(int i=0; i<v; i++) {
-		visited[i] = false;
-	}
-	bool ans = hasPathDFS(edges, v, x, y, visited);
-	bool ans2 = hasPathBFS(edges, v, x, y, visited);
-	cout << (ans == true ? "True" : "False") << endl;
-	cout << (ans2 == true ? "true" : "false") << endl;
+	int v1, v2;
+	cin >> v1 >> v2;
+	bool ans = hasPath(edges, v, v1, v2);
+	cout << (ans == true ? "Yes" : "No") << endl;
 	return 0;
 }
