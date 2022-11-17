@@ -39,34 +39,48 @@ Node* takeInput() {
 	return root;
 }
 
-class Solution{
-public:
-    Node *inOrderSuccessor(Node *root, Node *x) {
-        Node* ans = NULL;
-        Node* temp = root;
-        while(temp != NULL) {
-        	if(temp->data > x->data) {
-        		ans = temp;
-        		temp = temp->left;
-        	}
-        	else {
-        		temp = temp->right;
-        	}
-        }
-        return ans;
-    }
-};
+void findPreSuc(Node* root, Node*& pre, Node*& suc, int key) {
+	Node* temp = root;
+	while(temp != NULL) {
+		if(temp->data > key) {
+			suc = temp;
+			temp = temp->left;
+		}
+		else {
+			temp = temp->right;
+		}
+	}
+	temp = root;
+	while(temp != NULL) {
+		if(temp->data < key) {
+			pre = temp;
+			temp = temp->right;
+		}
+		else {
+			temp = temp->left;
+		}
+	}
+	return;
+}
 
 int main() {
 	Node* root = takeInput();
-	Node* x = takeInput();
-	Solution solve;
-	Node* ans = solve.inOrderSuccessor(root, x);
-	if(ans == NULL) {
+	Node* pre = NULL;
+	Node* suc = NULL;
+	int key;
+	cin >> key;
+	findPreSuc(root, pre, suc, key);
+	if(pre == NULL) {
+		cout << -1 << " ";
+	}
+	else {
+		cout << pre->data << " ";
+	}
+	if(suc == NULL) {
 		cout << -1 << "\n";
 	}
 	else {
-		cout << ans->data << "\n";
+		cout << suc->data << "\n";
 	}
 	return 0;
 }

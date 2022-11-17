@@ -40,33 +40,47 @@ Node* takeInput() {
 }
 
 class Solution{
+	bool check(Node* root, int target, set<int>& values) {
+		if(root == NULL) {
+			return false;
+		}
+		if(check(root->left,target,values) == true) {
+			return true;
+		}
+		values.insert(root->data);
+		if(values.find(target-root->data) != values.end()) {
+			return true;
+		}
+		if(check(root->right,target,values) == true) {
+			return true;
+		}
+		return false;
+	}
+
 public:
-    Node *inOrderSuccessor(Node *root, Node *x) {
-        Node* ans = NULL;
-        Node* temp = root;
-        while(temp != NULL) {
-        	if(temp->data > x->data) {
-        		ans = temp;
-        		temp = temp->left;
-        	}
-        	else {
-        		temp = temp->right;
-        	}
-        }
-        return ans;
+    // root : the root Node of the given BST
+    // target : the target sum
+    int isPairPresent(Node *root, int target) {
+    	if(root == NULL) {
+    		return 0;
+    	}
+    	set<int> values;
+    	bool ans = check(root, target, values);
+    	if(ans == true) {
+    		return 1;
+    	}
+    	else {
+    		return 0;
+    	}
     }
 };
 
 int main() {
-	Node* root = takeInput();
-	Node* x = takeInput();
 	Solution solve;
-	Node* ans = solve.inOrderSuccessor(root, x);
-	if(ans == NULL) {
-		cout << -1 << "\n";
-	}
-	else {
-		cout << ans->data << "\n";
-	}
+	Node* root = takeInput();
+	int target;
+	cin >> target;
+	int ans = solve.isPairPresent(root, target);
+	cout << ans << "\n";
 	return 0;
 }
