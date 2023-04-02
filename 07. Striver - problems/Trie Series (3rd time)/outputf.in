@@ -1,1 +1,31 @@
-1 2 
+hello h 0 0==== 
+hello 4
+o hello 4 4
+l hello 3 3
+l hello 2 2
+e hello 1 1
+hhllo h 0 0==== 
+hhllo h 1 0==== 
+hhllo 3
+o hhllo 4 3
+l hhllo 3 2
+l hhllo 2 1
+hell h 0 0==== 
+hell 3
+l hell 3 3
+l hell 2 2
+e hell 1 1
+leetcoded e 1 1==== 
+leetcoded e 2 1==== 
+leetcoded e 7 5==== 
+d leetcoded 6 5
+o leetcoded 5 4
+c leetcoded 4 3
+t leetcoded 3 2
+l leetcoded 0 1
+c leetcoded 4 5
+t leetcoded 3 4
+e leetcoded 2 3
+e leetcoded 1 2
+l leetcoded 0 1
+0 0 0 0
